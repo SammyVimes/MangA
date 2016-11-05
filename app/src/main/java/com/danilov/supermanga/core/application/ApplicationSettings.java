@@ -164,6 +164,7 @@ public class ApplicationSettings {
         private int mangasComplete = 0;
         private long bytesDownloaded = 0;
         private boolean alwaysShowButtons = false;
+        private boolean orbotProxy = false;
         private boolean tutorialViewerPassed = false;
 
         public void init(final Context context) {
@@ -184,6 +185,7 @@ public class ApplicationSettings {
             mangasComplete = sharedPreferences.getInt(Constants.Settings.MANGA_FINISHED, 0);
             bytesDownloaded = sharedPreferences.getLong(Constants.Settings.BYTES_DOWNLOADED, 0L);
             alwaysShowButtons = sharedPreferences.getBoolean(Constants.Settings.ALWAYS_SHOW_VIEWER_BUTTONS, false);
+            orbotProxy =sharedPreferences.getBoolean(Constants.Settings.ORBOT_PROXY,false);
             tutorialViewerPassed = sharedPreferences.getBoolean(Constants.Settings.TUTORIAL_VIEWER_PASSED, false);
         }
 
@@ -210,6 +212,7 @@ public class ApplicationSettings {
             editor.putInt(Constants.Settings.MANGA_FINISHED, mangasComplete);
             editor.putLong(Constants.Settings.BYTES_DOWNLOADED, bytesDownloaded);
             editor.putBoolean(Constants.Settings.ALWAYS_SHOW_VIEWER_BUTTONS, alwaysShowButtons);
+            editor.putBoolean(Constants.Settings.ORBOT_PROXY,orbotProxy);
             editor.putBoolean(Constants.Settings.TUTORIAL_VIEWER_PASSED, tutorialViewerPassed);
             editor.apply();
         }
@@ -269,7 +272,10 @@ public class ApplicationSettings {
         public void setAlwaysShowButtons(final boolean alwaysShowButtons) {
             this.alwaysShowButtons = alwaysShowButtons;
         }
-
+        public boolean isOrbotProxy() {return orbotProxy;}
+        public void setOrbotProxy(final boolean orbotProxy){
+            this.orbotProxy = orbotProxy;
+        }
         public boolean isTutorialViewerPassed() {
             return tutorialViewerPassed;
         }

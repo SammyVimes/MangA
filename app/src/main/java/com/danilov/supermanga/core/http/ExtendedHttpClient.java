@@ -3,8 +3,10 @@ package com.danilov.supermanga.core.http;
 import android.util.Log;
 
 import com.danilov.supermanga.core.util.Constants;
+import com.danilov.supermanga.core.application.ApplicationSettings;
 
 import org.apache.http.Header;
+import org.apache.http.HttpHost ;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
@@ -14,6 +16,7 @@ import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.params.ConnManagerParams;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -30,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.GZIPInputStream;
 
+import com.danilov.supermanga.core.application.MangaApplication;
+
 
 public class ExtendedHttpClient extends DefaultHttpClient {
     private static final String TAG = "ExtendedHttpClient";
@@ -38,6 +43,8 @@ public class ExtendedHttpClient extends DefaultHttpClient {
 
     private static final BasicHttpParams sParams;
     private static final ClientConnectionManager sConnectionManager;
+    private HttpHost proxyHost;
+    private ApplicationSettings.UserSettings userSettings = ApplicationSettings.get(MangaApplication.getContext()).getUserSettings();
 
     static {
 
@@ -60,12 +67,31 @@ public class ExtendedHttpClient extends DefaultHttpClient {
         sConnectionManager = new ThreadSafeClientConnManager(params, schemeRegistry);
 
     }
+    public void useProxy(boolean enableTor)
+    {
+        if (enableTor)
+        {
+            proxyHost = new HttpHost("localhost",8118, "http");
+            getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxyHost);
+        }
+        else
+        {
+            getParams().removeParameter(ConnRoutePNames.DEFAULT_PROXY);
+            proxyHost = null;
+        }
+
+    }
 
     public ExtendedHttpClient() {
         super(sConnectionManager, sParams);
 
         //System.setProperty("http.KeepAlive","false");
-
+        //settings = ApplicationSettings.get(getContext());
+        //final ApplicationSettings.UserSettings userSettings = settings.getUserSettings();
+        if(userSettings.isOrbotProxy())
+            useProxy(true);
+        else
+            useProxy(false);
         this.addRequestInterceptor(new DefaultRequestInterceptor());
         this.addResponseInterceptor(new GzipResponseInterceptor());
     }
