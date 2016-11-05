@@ -94,6 +94,10 @@ public class ProfileActivity extends BaseToolbarActivity {
     @Bind(R.id.show_btns_switch)
     public SwitchCompat showBtnsSwitch;
 
+    @Bind(R.id.orbotproxy_switch)
+    public SwitchCompat orbotProxySwitch;
+    @Bind(R.id.use_orbot_proxy)
+    public View useOrbotProxy;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -171,7 +175,7 @@ public class ProfileActivity extends BaseToolbarActivity {
         int mangasCompleteInt = userSettings.getMangasComplete();
         long megabytesDownloadedLong = userSettings.getBytesDownloaded() / (1024 * 1024);
         boolean alwaysShowButtons = userSettings.isAlwaysShowButtons();
-
+        boolean orbotProxy =userSettings.isOrbotProxy();
         long seconds = timeReadLong / 1000;
         long hours = seconds / 3600;
         long secondsDelta = seconds - (hours * 3600);
@@ -208,7 +212,21 @@ public class ProfileActivity extends BaseToolbarActivity {
             Context context = getApplicationContext();
             ApplicationSettings.get(context).update(context);
         });
+        orbotProxySwitch.setChecked(orbotProxy);
+        useOrbotProxy.setOnClickListener(v -> {
+            boolean isChecked = !orbotProxySwitch.isChecked();
+            orbotProxySwitch.setChecked(isChecked);
+            userSettings.setOrbotProxy(isChecked);
+            Context context = getApplicationContext();
+            ApplicationSettings.get(context).update(context);
 
+
+        });
+        orbotProxySwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            userSettings.setOrbotProxy(isChecked);
+            Context context = getApplicationContext();
+            ApplicationSettings.get(context).update(context);
+        });
         userNameCard.setOnClickListener(v -> {
             ValueDialogFragment dialogFragment = ValueDialogFragment.createDialog(getString(R.string.username), userNameString, Constants.Settings.USER_NAME);
             dialogFragment.show(getFragmentManager(), ValueDialogFragment.TAG);

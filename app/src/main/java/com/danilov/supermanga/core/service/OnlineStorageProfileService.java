@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.preference.PreferenceManager;
+import android.provider.SyncStateContract;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 
@@ -392,6 +393,7 @@ public class OnlineStorageProfileService extends Service {
             Long bytesDownloaded = jsonObject.optLong(Constants.Settings.BYTES_DOWNLOADED, 0L);
             Integer mangaFinished = jsonObject.optInt(Constants.Settings.MANGA_FINISHED, 0);
             boolean showViewerButtons = jsonObject.optBoolean(Constants.Settings.ALWAYS_SHOW_VIEWER_BUTTONS, false);
+            boolean orbotProxy = jsonObject.optBoolean(Constants.Settings.ORBOT_PROXY,false);
             boolean tutorialViewerPassed = jsonObject.optBoolean(Constants.Settings.TUTORIAL_VIEWER_PASSED, false);
 
             ApplicationSettings applicationSettings = ApplicationSettings.get(getApplicationContext());
@@ -406,6 +408,7 @@ public class OnlineStorageProfileService extends Service {
             userSettings.setMangasComplete(mangaFinished);
 
             userSettings.setAlwaysShowButtons(showViewerButtons);
+            userSettings.setOrbotProxy(orbotProxy);
             userSettings.setTutorialViewerPassed(tutorialViewerPassed);
             applicationSettings.update(getApplicationContext());
         } catch (JSONException e) {

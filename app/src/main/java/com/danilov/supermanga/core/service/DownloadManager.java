@@ -12,7 +12,9 @@ import com.danilov.supermanga.core.interfaces.Pool;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.URL;
+import java.net.Proxy;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
@@ -240,6 +242,8 @@ public class DownloadManager {
         private int size = -1;
         private int downloaded = 0;
         private DownloadStatus status = DownloadStatus.DOWNLOADING;
+        private Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("localhost", 8118));
+        private ApplicationSettings.UserSettings userSettings = ApplicationSettings.get(MangaApplication.getContext()).getUserSettings();
 
         @Nullable
         private RequestPreprocessor preprocessor;
@@ -317,7 +321,10 @@ public class DownloadManager {
                 if (preprocessor != null) {
                     connection = preprocessor.process(url);
                 } else {
-                    connection = (HttpURLConnection) url.openConnection();
+                    if(userSettings.isOrbotProxy())
+                        connection = (HttpURLConnection) url.openConnection(proxy);
+                    else
+                        connection = (HttpURLConnection) url.openConnection();
                 }
 
                 // Specify what portion of file to download.
