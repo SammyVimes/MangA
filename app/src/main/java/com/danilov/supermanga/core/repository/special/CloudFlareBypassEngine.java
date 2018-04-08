@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -48,7 +49,7 @@ public abstract class CloudFlareBypassEngine implements RepositoryEngine {
         return cookieStore;
     }
 
-    private final static Pattern OPERATION_PATTERN = Pattern.compile("setTimeout\\(function\\(\\)\\{\\s+(var s,t,o,p.+?\\r?\\n[\\s\\S]+?a\\.value =.+?)\\r?\\n");
+    private final static Pattern OPERATION_PATTERN = Pattern.compile("setTimeout\\(function\\(\\)\\{\\s+(var (?:\\w,)+f.+?\\r?\\n[\\s\\S]+?a\\.value =.+?)\\r?\\n");
     private final static Pattern PASS_PATTERN = Pattern.compile("name=\"pass\" value=\"(.+?)\"");
     private final static Pattern CHALLENGE_PATTERN = Pattern.compile("name=\"jschl_vc\" value=\"(\\w+)\"");
 
@@ -78,44 +79,42 @@ public abstract class CloudFlareBypassEngine implements RepositoryEngine {
             String challengePass = passSearch.group(1); // ключ
             String challenge = challengeSearch.group(1); // хэш
 
-            // вырезаем присвоение переменной
-            String operation = rawOperation
-                    .replaceAll("a\\.value =(.+?) \\+ .+?;", "$1")
-                    .replaceAll("\\s{3,}[a-z](?: = |\\.).+", "");
-            String js = operation.replace("\n", "");
-
-            int idx = js.lastIndexOf('\'');
-            if (idx != -1) {
-                js = js.substring(0, idx);
-                idx = js.lastIndexOf('\'');
-                if (idx != -1) {
-                    js = js.substring(0, idx);
-                    js += ';';
-                }
+            // Oooops...
+            if (rawOperation == null || challenge == null || challengePass == null) {
+                throw new Exception("Failed resolving Cloudflare challenge");
             }
+
+            // вырезаем присвоение переменной
+            String js = rawOperation
+                    .replaceAll("a\\.value = (.+ \\+ t\\.length).+", "$1")
+                    .replaceAll("\\s{3,}[a-z](?: = |\\.).+", "")
+                    .replaceAll("t.length", String.valueOf(domain.length()) )
+                    .replace("\n", "");
 
             rhino.setOptimizationLevel(-1); // без этой строки rhino не запустится под Android
             Scriptable scope = rhino.initStandardObjects(); // инициализируем пространство исполнения
 
             // either do or die trying
-            int res = ((Double) rhino.evaluateString(scope, js, "CloudFlare JS Challenge", 1, null)).intValue();
-            String answer = String.valueOf(res + domain.length()); // ответ на javascript challenge
+            double res = ((Double) rhino.evaluateString(scope, js, "CloudFlare JS Challenge", 1, null)).doubleValue();
+            //String answer = String.valueOf(res); // ответ на javascript challenge
+            String answer = String.format(Locale.ENGLISH, "%1$,.10f", res);
 
             final List<NameValuePair> params = new ArrayList<>(3);
             params.add(new BasicNameValuePair("jschl_vc", challenge));
             params.add(new BasicNameValuePair("pass", challengePass));
             params.add(new BasicNameValuePair("jschl_answer", answer));
 
-            HashMap<String, String> headers = new HashMap<>(1);
-
             String url = "http://" + domain + "/cdn-cgi/l/chk_jschl?" + URLEncodedUtils.format(params, "windows-1251");
 
             HttpGet httpGet = new HttpGet();
             httpGet.setURI(URI.create(url));
             httpGet.setHeader("Referer", "http://" + domain + "/"); // url страницы, с которой было произведено перенаправление
+            httpGet.setHeader("Accept", "text/html,application/xhtml+xml,application/xml");
+            httpGet.setHeader("Accept-Language", "ru");
 
             HttpResponse httpResponse = context != null ? httpClient.execute(httpGet, context) : httpClient.execute(httpGet);
-            if(httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) { // в ответе придёт страница, указанная в Referer
+            int status = httpResponse.getStatusLine().getStatusCode();
+            if(status == HttpStatus.SC_OK) { // в ответе придёт страница, указанная в Referer
                 cookieStore = httpClient.getCookieStore();
                 return httpResponse;
             }
