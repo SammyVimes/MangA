@@ -11,6 +11,9 @@ android:
   - extra-android-m2repository
   - extra-google-m2repository
   - extra-google-google_play_services
+  
+addons:
+  artifacts: true
 
 before_install:
   - chmod +x gradlew
@@ -21,4 +24,4 @@ licenses:
 notifications:
   email: true
 
-script: ./gradlew clean test
+script: ./gradlew assembleDebug
