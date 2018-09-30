@@ -17,8 +17,13 @@ import com.danilov.supermanga.core.model.MangaSuggestion;
 import com.danilov.supermanga.core.repository.filter.BasicFilters;
 import com.danilov.supermanga.core.util.Constants;
 import com.danilov.supermanga.core.util.IoUtils;
+import com.danilov.supermanga.core.util.RequestUtils;
 import com.danilov.supermanga.core.util.Utils;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +55,7 @@ public class AdultmangaEngine implements RepositoryEngine {
     private static final String TAG = "AdultmangaEngine";
 
 //  ADULT
-    private String baseSearchUri = "http://mintmanga.com/search?q=";
+    private String baseSearchUri = "http://mintmanga.com/search/advanced";
     private String baseSuggestionUri = "http://mintmanga.com/search/suggestion?query=";
     public static final String baseUri = "http://mintmanga.com";
 
@@ -59,6 +64,9 @@ public class AdultmangaEngine implements RepositoryEngine {
 
     @Inject
     public HttpBytesReader httpBytesReader;
+
+    @Inject
+    public HttpClient httpClient;
 
     @Override
     public String getLanguage() {
@@ -99,14 +107,19 @@ public class AdultmangaEngine implements RepositoryEngine {
         List<Manga> mangaList = null;
         if (httpBytesReader != null) {
             try {
-                String uri = baseSearchUri + URLEncoder.encode(query, Charset.forName(HTTP.UTF_8).name());
+                String uri = baseSearchUri;
+                final HttpPost request = RequestUtils.from(uri, "q", query);
+
+                HttpResponse response = httpClient.execute(request);
+                byte[] result = IoUtils.convertStreamToBytes(response.getEntity().getContent());
+                String responseString = IoUtils.convertBytesToString(result);
+
                 for (Filter.FilterValue filterValue : filterValues) {
                     uri = filterValue.apply(uri);
                 }
-                byte[] response = httpBytesReader.fromUri(uri);
-                String responseString = IoUtils.convertBytesToString(response);
+
                 mangaList = parseSearchResponse(Utils.toDocument(responseString));
-            } catch (UnsupportedEncodingException | HttpRequestException e) {
+            } catch (IOException e) {
                 throw new RepositoryException("Failed to load: " + e.getMessage());
             }
         }
@@ -249,11 +262,7 @@ public class AdultmangaEngine implements RepositoryEngine {
                     continue;
                 }
                 try {
-                    JSONObject data = suggestion.getJSONObject(dataElementName);
-                    if (data == null) {
-                        continue;
-                    }
-                    String link = data.getString(linkElementName);
+                    String link = suggestion.getString(linkElementName);
                     MangaSuggestion mangaSuggestion = new MangaSuggestion(value, link, DefaultRepository.ADULTMANGA);
                     mangaSuggestions.add(mangaSuggestion);
                 } catch (JSONException e ) {

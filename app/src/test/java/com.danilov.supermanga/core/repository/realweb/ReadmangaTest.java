@@ -4,6 +4,7 @@ import com.danilov.supermanga.BuildConfig;
 import com.danilov.supermanga.core.model.Manga;
 import com.danilov.supermanga.core.model.MangaChapter;
 import com.danilov.supermanga.core.model.MangaSuggestion;
+import com.danilov.supermanga.core.repository.ReadmangaEngine;
 import com.danilov.supermanga.core.repository.RepositoryEngine;
 import com.danilov.supermanga.core.repository.RepositoryException;
 import com.danilov.supermanga.core.repository.RepositoryHolder;
@@ -14,7 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.Collections;
@@ -23,17 +24,17 @@ import java.util.List;
 /**
  * Created by Semyon on 19.03.2016.
  */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class ReadmangaTest {
 
-    private RepositoryEngine engine;
+    private ReadmangaEngine engine;
 
     @Before
     public void setUp() {
         RepositoryHolder service = ServiceContainer.getService(RepositoryHolder.class);
         RepositoryEngine.Repository repository = service.valueOf(RepositoryEngine.DefaultRepository.READMANGA.toString());
-        engine = repository.getEngine();
+        engine = (ReadmangaEngine) repository.getEngine();
     }
 
     @After
@@ -57,7 +58,7 @@ public class ReadmangaTest {
     public void testQueryRepository() {
         List<Manga> searchResults = null;
         try {
-            searchResults = engine.queryRepository("Dragon", Collections.emptyList());
+            searchResults = engine.queryRepository("Dragon ball", Collections.emptyList());
         } catch (RepositoryException e) {
             Assert.fail("Should not fail: " + e.getMessage());
         }
@@ -69,7 +70,7 @@ public class ReadmangaTest {
     public void testQueryForMangaDescription() {
         List<Manga> searchResults = null;
         try {
-            searchResults = engine.queryRepository("Dragon", Collections.emptyList());
+            searchResults = engine.queryRepository("Dragon ball", Collections.emptyList());
         } catch (RepositoryException e) {
             Assert.fail("Should not fail: " + e.getMessage());
         }
@@ -88,7 +89,7 @@ public class ReadmangaTest {
     public void testQueryForMangaChapters() {
         List<Manga> searchResults = null;
         try {
-            searchResults = engine.queryRepository("Dragon", Collections.emptyList());
+            searchResults = engine.queryRepository("Dragon ball", Collections.emptyList());
         } catch (RepositoryException e) {
             Assert.fail("Should not fail: " + e.getMessage());
         }
@@ -107,7 +108,7 @@ public class ReadmangaTest {
     public void testQueryForChapterImages() {
         List<Manga> searchResults = null;
         try {
-            searchResults = engine.queryRepository("Dragon", Collections.emptyList());
+            searchResults = engine.queryRepository("Dragon ball", Collections.emptyList());
         } catch (RepositoryException e) {
             Assert.fail("Should not fail: " + e.getMessage());
         }

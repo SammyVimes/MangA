@@ -4,6 +4,7 @@ import com.danilov.supermanga.BuildConfig;
 import com.danilov.supermanga.core.model.Manga;
 import com.danilov.supermanga.core.model.MangaChapter;
 import com.danilov.supermanga.core.model.MangaSuggestion;
+import com.danilov.supermanga.core.repository.MangaReaderNetEngine;
 import com.danilov.supermanga.core.repository.RepositoryEngine;
 import com.danilov.supermanga.core.repository.RepositoryException;
 import com.danilov.supermanga.core.repository.RepositoryHolder;
@@ -14,7 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.Collections;
@@ -23,17 +24,17 @@ import java.util.List;
 /**
  * Created by Semyon on 19.03.2016.
  */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class MangaReaderNetTest {
 
-    private RepositoryEngine engine;
+    private MangaReaderNetEngine engine;
 
     @Before
     public void setUp() {
         RepositoryHolder service = ServiceContainer.getService(RepositoryHolder.class);
         RepositoryEngine.Repository repository = service.valueOf(RepositoryEngine.DefaultRepository.MANGAREADERNET.toString());
-        engine = repository.getEngine();
+        engine = (MangaReaderNetEngine) repository.getEngine();
     }
 
     @After

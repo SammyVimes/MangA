@@ -154,7 +154,8 @@ public abstract class CloudFlareBypassEngine implements RepositoryEngine {
             }
             HttpResponse response = context != null ? httpClient.execute(request, context) : httpClient.execute(request);
             if (response.getStatusLine().getStatusCode() >= 400) {
-                response = parseCFResponse(response, httpClient, context, request.getURI().toString());
+                HttpResponse cfResponse = response;
+                response = parseCFResponse(cfResponse, httpClient, context, request.getURI().toString());
                 return response;
             }
             return response;

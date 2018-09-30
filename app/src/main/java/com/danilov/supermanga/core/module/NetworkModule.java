@@ -14,6 +14,8 @@ import com.danilov.supermanga.core.http.HttpBytesReader;
 import com.danilov.supermanga.core.http.HttpStreamReader;
 import com.danilov.supermanga.core.service.LocalImageManager;
 
+import org.apache.http.client.HttpClient;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -60,6 +62,11 @@ public class NetworkModule {
     public LocalImageManager provideLocalImageManager(@NonNull final BitmapCache bitmapCache,
                                                       @NonNull final MangaApplication application) {
         return new LocalImageManager(bitmapCache, application.getResources());
+    }
+
+    @Provides
+    public HttpClient provideHttpClient() {
+        return new ExtendedHttpClient();
     }
 
 }

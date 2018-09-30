@@ -37,7 +37,7 @@ ext.versions = [
         lynx                         : '1.6',
 
         junit                        : '4.12',
-        robolectric                  : '3.0',
+        robolectric                  : '3.8',
         assertJ                      : '1.7.1',
         equalsVerifier               : '1.7.5',
         mockito                      : '1.10.19',

@@ -41,11 +41,11 @@ public class MangaReaderNetEngine implements RepositoryEngine {
 
     private static final String TAG = "MangaReaderNetEngine";
 
-    private String baseSuggestionUri = "http://www.mangareader.net/actions/search/?q=";
+    private String baseSuggestionUri = "https://www.mangareader.net/actions/search/?q=";
 
-    private String baseUri = "http://www.mangareader.net";
+    private String baseUri = "https://www.mangareader.net";
 
-    private String baseSearchUri = "http://www.mangareader.net/search/?w=";
+    private String baseSearchUri = "https://www.mangareader.net/search/?w=";
 
     @Inject
     public HttpStreamReader httpStreamReader;
