@@ -4,11 +4,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SwitchCompat;
 import android.test.UiThreadTest;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -63,6 +66,8 @@ public class MainActivity extends BaseToolbarActivity implements FragmentManager
 
     private View drawerMenu;
 
+    private SwitchCompat darkThemeSwitch;
+
     private TextView userNameTextView;
 
     private DrawerLayout castedDrawerLayout;
@@ -101,6 +106,7 @@ public class MainActivity extends BaseToolbarActivity implements FragmentManager
 
         updatesDAO = ServiceContainer.getService(UpdatesDAO.class);
         drawerLayout = findViewById(R.id.drawer_layout);
+        darkThemeSwitch = findViewWithId(R.id.dark_theme);
         userNameTextView = findViewWithId(R.id.user_name);
         isLargeLandscape = findViewById(R.id.is_large) != null; //dealing with landscape pads
         drawerList = (ListView) findViewById(R.id.left_drawer);
@@ -201,6 +207,20 @@ public class MainActivity extends BaseToolbarActivity implements FragmentManager
                 });
             }
         }
+
+
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean darkTheme = sharedPreferences.getBoolean("DARK_THEME", false);
+        darkThemeSwitch.setChecked(darkTheme);
+        darkThemeSwitch.setOnCheckedChangeListener((a, b) -> {
+            SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+            sp.edit().putBoolean("DARK_THEME", b).apply();
+
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

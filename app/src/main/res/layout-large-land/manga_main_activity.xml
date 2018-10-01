@@ -67,6 +67,18 @@
                         android:layout_height="fill_parent"
                         android:background="@drawable/selectable_item_background_black_origin"/>
 
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/dark_theme"
+                        android:text="Тёмная тема"
+                        android:layout_below="@+id/profile_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:layout_marginTop="10dp"
+                        android:textSize="16sp"
+                        android:layout_alignLeft="@+id/profile_image"/>
+
                 </RelativeLayout>
 
                 <ListView android:id="@+id/left_drawer"
