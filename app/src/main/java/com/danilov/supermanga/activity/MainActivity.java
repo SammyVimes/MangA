@@ -165,6 +165,7 @@ public class MainActivity extends BaseToolbarActivity implements FragmentManager
         String userName = userSettings.getUserName();
         if (userName != null && !userName.isEmpty()) {
             userNameTextView.setText(userName);
+            userNameTextView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }
 
         if (!tutorialMenuPassed) {

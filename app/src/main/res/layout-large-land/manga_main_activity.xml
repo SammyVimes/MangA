@@ -56,6 +56,7 @@
                         android:layout_marginLeft="10dp"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/border_red"
                         android:gravity="center_vertical"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="@string/profile_promise"/>
