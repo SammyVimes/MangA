@@ -28,6 +28,8 @@
         <item name="colorControlActivated">@color/color_accent</item>
         <item name="colorControlHighlight">@color/color_accent</item>
 
+        <item name="empty_list_placeholder_text">#000</item>
+
 
         <item name="textAppearanceLargePopupMenu">@style/Manga.PopupMenu.TextAppearanceLarge</item>
         <item name="android:textAppearanceLargePopupMenu">@style/Manga.PopupMenu.TextAppearanceLarge</item>
@@ -107,6 +109,8 @@
         <item name="grid_item_background">@drawable/grid_item_background_dark</item>
         <item name="triangle_left_top">@drawable/left_top_triangle_dark</item>
         <item name="square_marker">@drawable/square_marker_dark</item>
+
+        <item name="empty_list_placeholder_text">#fff</item>
 
         <item name="profile_text_toolbar_title">@android:color/white</item>
         <item name="profile_text_category_title">@android:color/white</item>

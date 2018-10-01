@@ -52,6 +52,8 @@
     <attr name="grid_item_background"/>
     <attr name="card_text_color"/>
 
+    <attr name="empty_list_placeholder_text" format="color"/>
+
     <attr name="fragment_background" format="color"/>
 
     <attr name="menu_drawer_item_color" format="color"/>

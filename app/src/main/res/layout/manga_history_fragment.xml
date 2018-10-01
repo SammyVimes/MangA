@@ -6,6 +6,15 @@
                 android:background="?attr/fragment_background"
                 android:orientation="vertical">
 
+    <com.danilov.supermanga.core.view.CTextView
+        android:id="@+id/empty_placeholder"
+        android:textColor="?attr/empty_list_placeholder_text"
+        android:textSize="16sp"
+        android:text="👩🏽‍🎤 Вы ничего не читаете 👨🏽‍🎤"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <com.danilov.supermanga.core.widget.AutoFitRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="fill_parent"

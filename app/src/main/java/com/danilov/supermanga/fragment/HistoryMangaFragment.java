@@ -56,6 +56,9 @@ public class HistoryMangaFragment extends BaseFragmentNative {
     @Bind(R.id.history_progress_bar)
     public ProgressBar historyProgressBar;
 
+    @Bind(R.id.empty_placeholder)
+    public TextView emptyPlaceholder;
+
     @Inject
     public LocalImageManager localImageManager = null;
 
@@ -170,6 +173,7 @@ public class HistoryMangaFragment extends BaseFragmentNative {
                     if (history != null && !history.isEmpty()) {
                         adapter = new HistoryMangaAdapter(gridView, history);
                         adapter.setClickListener(listener);
+                        emptyPlaceholder.setVisibility(View.GONE);
                     }
                     historyProgressBar.setVisibility(View.INVISIBLE);
                     if (success) {
@@ -189,6 +193,10 @@ public class HistoryMangaFragment extends BaseFragmentNative {
         try {
             historyDAO.deleteManga(historyElement.getManga(), historyElement.isOnline());
             adapter.notifyItemRemoved(position);
+
+            if (adapter.getItemCount() < 1) {
+                emptyPlaceholder.setVisibility(View.VISIBLE);
+            }
         } catch (DatabaseAccessException e) {
             Utils.showToast(getActivity(), getActivity().getString(R.string.e_failed_remove_history) + e.getMessage());
         }

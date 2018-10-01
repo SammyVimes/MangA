@@ -82,7 +82,7 @@ public class DownloadManagerFragment extends BaseFragmentNative {
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onActivityCreated(savedInstanceState);
         activity = (BaseToolbarActivity) getActivity();
         context = activity;
         cardWrapper = findViewById(R.id.card_wrapper);
