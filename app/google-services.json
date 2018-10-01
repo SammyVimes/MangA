@@ -1,1 +1,55 @@
-{"project_info":{"project_id":"manga-1053","project_number":"210456744502","name":"Manga"},"client":[{"client_info":{"client_id":"android:com.danilov.supermanga","client_type":1,"android_client_info":{"package_name":"com.danilov.supermanga"}},"oauth_client":[{"client_id":"210456744502-hoo59tbd9v520q098238f18i8l5r5fii.apps.googleusercontent.com","client_type":1,"android_info":{"package_name":"com.danilov.supermanga","certificate_hash":""}}],"api_key":[],"services":{"analytics_service":{"status":1},"cloud_messaging_service":{"status":1,"apns_config":[]},"appinvite_service":{"status":1,"other_platform_oauth_client":[]},"google_signin_service":{"status":2},"ads_service":{"status":1}}}],"ARTIFACT_VERSION":"1"}
+{
+  "project_info": {
+    "project_number": "423275893848",
+    "firebase_url": "https://supermangareaderreborn.firebaseio.com",
+    "project_id": "supermangareaderreborn",
+    "storage_bucket": "supermangareaderreborn.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:423275893848:android:85753f01d9af8ada",
+        "android_client_info": {
+          "package_name": "com.danilov.supermanga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "423275893848-fmehcd0u5kcqp4ur71dkidie4qklrsen.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.danilov.supermanga",
+            "certificate_hash": "135c732475c3e0a5354ed74392fb52e516bd2809"
+          }
+        },
+        {
+          "client_id": "423275893848-vbcumi1asp202rseht5cms4pqg2hdsuj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdS1XKAxlJpefbQXhuGH8nO1POOdp1Fxs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "423275893848-vbcumi1asp202rseht5cms4pqg2hdsuj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

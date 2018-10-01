@@ -116,12 +116,11 @@ dependencies {
     compile 'rapid.decoder:png-decoder:0.3.0'
     compile 'com.github.shell-software:fab:1.0.5'
     compile 'de.hdodenhof:circleimageview:1.2.2'
-    //    compile 'com.google.android.gms:play-services-ads:7.8.0'
     //google drive api
-    compile 'com.google.android.gms:play-services-identity:8.4.0'
-    compile 'com.google.android.gms:play-services-base:8.4.0'
-    compile 'com.google.android.gms:play-services-drive:8.4.0'
-    compile 'com.google.android.gms:play-services-plus:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:9.0.0'
+    compile 'com.google.android.gms:play-services-base:9.0.0'
+    compile 'com.google.android.gms:play-services-drive:9.0.0'
+    compile 'com.google.android.gms:play-services-plus:9.0.0'
     compile 'org.mozilla:rhino:1.7R4'
     compile files('libs/acra-4.5.0.jar')
 }

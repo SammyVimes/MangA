@@ -23,6 +23,7 @@ import com.danilov.supermanga.core.service.ServiceConnectionListener;
 import com.danilov.supermanga.core.util.Constants;
 import com.danilov.supermanga.core.widget.RelativeTimeTextView;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 
 import java.util.regex.Matcher;
@@ -186,6 +187,7 @@ public class CloudStorageActivity extends BaseToolbarActivity implements Refresh
     }
 
     private static final int GOOGLE_AUTH_REQUEST_CODE = 1;
+    private static final int UNAVAILABLE_GOOGLE_AUTH_REQUEST_CODE = 2;
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
@@ -272,7 +274,8 @@ public class CloudStorageActivity extends BaseToolbarActivity implements Refresh
                     ConnectionResult connectionResult = (ConnectionResult) msg.obj;
                     if (!connectionResult.hasResolution()) {
                         // show the localized error dialog.
-                        GooglePlayServicesUtil.getErrorDialog(connectionResult.getErrorCode(), activity, 0).show();
+                        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+                        apiAvailability.getErrorDialog(activity, connectionResult.getErrorCode(), UNAVAILABLE_GOOGLE_AUTH_REQUEST_CODE).show();
                         return;
                     }
 
